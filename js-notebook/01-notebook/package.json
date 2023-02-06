@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "escape-html": "^1.0.3",
-    "serve-static": "^1.12.4",
-    "sqlite3": "^5.0.11"
-  }
-}
