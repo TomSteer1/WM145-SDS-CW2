@@ -5,6 +5,11 @@ use rocket::{response::content::RawCss, *};
 use rocket_dyn_templates::tera;
 use rusqlite::{Connection, Result};
 
+#[derive(FromForm)]
+struct NoteForm {
+    note: String,
+}
+
 #[get("/")]
 fn index() -> RawHtml<String> {
     let html: String = r#"
@@ -55,8 +60,23 @@ fn serve_css() -> RawCss<&'static str> {
     )
 }
 
+#[post("/add", data = "<note>")]
+fn add(note: Form<NoteForm>) -> Redirect {
+    let conn = Connection::open("notes.db").unwrap();
+    conn.execute("INSERT INTO notes (note) VALUES (?)", &[note.note.as_str()])
+        .unwrap();
+    Redirect::to("/")
+}
+
+
+fn sqlite() {
+    let conn = Connection::open("notes.db").unwrap();
+    conn.execute("CREATE TABLE IF NOT EXISTS notes (note TEXT)", ())
+        .unwrap();
+}
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, serve_css])
+    sqlite();
+    rocket::build().mount("/", routes![index, add, serve_css])
 }
