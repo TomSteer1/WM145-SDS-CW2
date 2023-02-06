@@ -10,9 +10,20 @@ struct NoteForm {
     note: String,
 }
 
+#[derive(Debug)]
+struct Note {
+    id: i32,
+    note: String,
+}
+
+#[derive(FromForm)]
+struct NoteID {
+    noteid: i32,
+}
+
 #[get("/")]
 fn index() -> RawHtml<String> {
-    let html: String = r#"
+    let mut html: String = r#"
         <link rel="stylesheet" href="style.css">
         <h1>Rust Notebook</h1>
         <form method='POST' action='/add'>
@@ -21,6 +32,19 @@ fn index() -> RawHtml<String> {
         </form>
         <ul class='notes'>"#
         .to_owned();
+
+    let notes = get_notes().unwrap();
+
+    for note in notes {
+        let noteid: String = note.id.to_string();
+        html += "<li class='notes'>";
+        html += &tera::escape_html(&note.note);
+        html += "<form method='POST' action='/delete'> <button name='noteid' value='";
+        html += &noteid;
+        html += "' style='float: right;'>Delete</button></form></li>";
+    }
+
+    html += "</ul>";
 
     RawHtml(html)
 }
@@ -36,7 +60,7 @@ fn serve_css() -> RawCss<&'static str> {
 }
 
 .notes li {
-    position: relative; 
+    position: relative;
     width: 30%;
     padding: 1em 1.5em;
     margin: 1em;
@@ -55,9 +79,20 @@ fn serve_css() -> RawCss<&'static str> {
     border-color: #fff #fff #eea #eea;
     background: #eea;
     box-shadow: 0 1px 1px rgba(0,0,0,0.2), -1px 1px 1px rgba(0,0,0,0.1);
-}    
+}
     "#,
     )
+}
+
+#[post("/delete", data = "<noteid>")]
+fn delete(noteid: Form<NoteID>) -> Redirect {
+    let conn = Connection::open("notes.db").unwrap();
+    conn.execute(
+        "DELETE FROM notes WHERE rowid = ?",
+        &[noteid.noteid.to_string().as_str()],
+    )
+    .unwrap();
+    Redirect::to("/")
 }
 
 #[post("/add", data = "<note>")]
@@ -68,15 +103,34 @@ fn add(note: Form<NoteForm>) -> Redirect {
     Redirect::to("/")
 }
 
-
 fn sqlite() {
     let conn = Connection::open("notes.db").unwrap();
     conn.execute("CREATE TABLE IF NOT EXISTS notes (note TEXT)", ())
         .unwrap();
 }
 
+fn get_notes() -> Result<Vec<Note>> {
+    let conn = Connection::open("notes.db").unwrap();
+
+    let stmt = conn.prepare("SELECT rowid, note FROM notes");
+    let mut binding = stmt?;
+    let mut notes = binding.query([])?;
+
+    let mut notearray = Vec::new();
+
+    while let Some(row) = notes.next()? {
+        let n = Note {
+            id: row.get(0)?,
+            note: row.get(1)?,
+        };
+        notearray.push(n);
+    }
+
+    Ok(notearray)
+}
+
 #[launch]
 fn rocket() -> _ {
     sqlite();
-    rocket::build().mount("/", routes![index, add, serve_css])
+    rocket::build().mount("/", routes![index, add, serve_css, delete])
 }
