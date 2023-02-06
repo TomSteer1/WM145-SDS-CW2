@@ -1,0 +1,7 @@
+node_modules/
+/images
+*.sqlite
+*.db
+package-lock.json
+Cargo.lock
+target/
