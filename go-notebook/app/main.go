@@ -150,7 +150,7 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 		var note string
 		err = rows.Scan(&id, &note)
 		handleErr(err)
-		fmt.Fprintf(w,"<li>" + html.EscapeString(note) + `<form method="POST"><input type="hidden" name="method" value="delete"><input type="hidden" name="id" value=` + id + `><button>Delete</button></form></li>`);
+		fmt.Fprintf(w,"<li>" + html.EscapeString(note) + `<form method="POST"><input type="hidden" name="method" value="delete"><button name="id" value="` + id + `"style="float: right;">Delete</button></form></li>`);
 	}
 	err = rows.Err()
 	handleErr(err)
