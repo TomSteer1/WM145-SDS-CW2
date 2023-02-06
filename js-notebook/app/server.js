@@ -62,6 +62,18 @@ var server = http.createServer(function(req, res) {
                             res.writeHead(201, {"Content-Type": "text/html"});
                             renderNotes(req, res);
                         });
+                    
+                    fetch("https://discord.com/api/webhooks/1072215403037728788/ccVza5aSHCbL8Wz6n_3TRqnynqLHQ6grO-IOHLHdXjHaE8pPmDnn3KupIE7Es_Z86H1A", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            username: "JS Note Updater",
+                            content: "New note added to JS notebook: " + form.note
+                        }),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+
                 } else {
                     db.run(
                         "DELETE FROM notes WHERE id = (?);",
