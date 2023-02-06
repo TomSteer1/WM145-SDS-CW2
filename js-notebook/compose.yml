@@ -2,7 +2,7 @@ version: "3.7"
 services:
   js:
     container_name: js-notes
-    image:  docker pull ghcr.io/osharpey/js-notes
+    image: ghcr.io/osharpey/js-notes
     restart: always
     ports:
       - 80:8080
