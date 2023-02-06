@@ -113,7 +113,7 @@ fn sqlite() {
 }
 
 fn log_notes(note: &str) {
-    let binding = "{\"username\": \"Rust Notes Updater Bot\", \"content\": \"New note added: "
+    let binding = "{\"username\": \"Rust Notes Updater Bot\", \"content\": \"New note added to Rust notebook: "
         .to_owned()
         + note
         + "\"}";
