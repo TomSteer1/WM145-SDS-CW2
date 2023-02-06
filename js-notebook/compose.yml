@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  js:
+    container_name: js-notes
+    image:  docker pull ghcr.io/osharpey/js-notes
+    restart: always
+    ports:
+      - 80:8080
+    volumes:
+      - /tmp/notes.db:/app/notes.db
