@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  go:
+    container_name: notes
+    image: go-notes
+    restart: always
+    ports:
+      - 80:8080
+    volumes:
+      - /tmp/notes.db:/app/notes.db
