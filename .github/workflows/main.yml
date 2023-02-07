@@ -1,5 +1,5 @@
-name: Deploy Docker Containers
-run-name: Docker Deploy
+name: Deploy GO Docker Container
+run-name: Go Deploy
 on: 
   push:
     paths:
