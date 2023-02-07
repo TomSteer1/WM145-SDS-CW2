@@ -9,8 +9,18 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  test-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Ensures package builds
+        run: |
+          cd go-notebook/app
+          go build -o main .
+
   build-and-push-go:
     runs-on: ubuntu-latest
+    needs: test-go
     permissions:
       contents: read
       packages: write
