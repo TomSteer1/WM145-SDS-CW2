@@ -28,4 +28,4 @@ jobs:
         with:
           context: go-notebook
           push: true
-          tags: "ghcr.io/osharpey/go-notes" 
+          tags: "ghcr.io/tomsteer1/go-notes" 
