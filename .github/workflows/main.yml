@@ -1,12 +1,15 @@
 name: Deploy Docker Containers
 run-name: Docker Deploy
-on: push 
+on: 
+  push:
+    paths:
+      - "go-notebook/*"
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
-  build-and-push-image:
+  build-and-push-go:
     runs-on: ubuntu-latest
     permissions:
       contents: read
