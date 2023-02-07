@@ -13,7 +13,7 @@ var servePublic = serveStatic("public", {
 });
 
 function renderNotes(req, res) {
-    db.all("SELECT id, note FROM notes", function(err, rows) {
+    db.all("SELECT rowid as id, note FROM notes", function(err, rows) {
         if (err) {
             res.end("<h1>Error: " + err + "</h1>");
             return;
@@ -64,7 +64,7 @@ var server = http.createServer(function(req, res) {
                         });
                 } else {
                     db.run(
-                        "DELETE FROM notes WHERE id = (?);",
+                        "DELETE FROM notes WHERE rowid = (?);",
                         [
                             form.delete,
                         ],
@@ -81,7 +81,7 @@ var server = http.createServer(function(req, res) {
 
 // initialize database and start the server
 db.on("open", function() {
-    db.run("CREATE TABLE notes (id integer not null primary key, note TEXT)", function(err) {
+    db.run("CREATE TABLE notes (note TEXT)", function(err) {
 			if(err){
 				console.log(err);
 			}
