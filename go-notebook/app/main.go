@@ -91,7 +91,7 @@ func createTable() {
 	var name string
 	err = row.Scan(&name)
 	if err != nil {
-		sqlStmt := `create table notes (id integer not null primary key, note text);`
+		sqlStmt := `create table notes (note text);`
 		_, err = db.Exec(sqlStmt)
 		handleErr(err)
 	}
@@ -112,7 +112,7 @@ func deleteNote(id string) {
 	db, err := sql.Open("sqlite3", "./notes.db")
 	handleErr(err)
 	defer db.Close()
-	stmt, err := db.Prepare("DELETE FROM notes WHERE id=?")
+	stmt, err := db.Prepare("DELETE FROM notes WHERE rowid=?")
 	handleErr(err)
 	defer stmt.Close()
 	_, err = stmt.Exec(id)
@@ -123,7 +123,7 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./notes.db")
 	handleErr(err)
 	defer db.Close()
-	rows, err := db.Query("SELECT id, note FROM notes")
+	rows, err := db.Query("SELECT rowid as id, note FROM notes")
 	handleErr(err)
 	defer rows.Close()
 	fmt.Fprintf(w, `<link rel="stylesheet" href="/style.css">
