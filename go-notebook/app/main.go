@@ -108,7 +108,7 @@ func createTable() {
 }
 
 func insertNote(note string) {
-	logNote(note)
+	go logNote(note)
 	db, err := sql.Open("sqlite3", "./notes.db")
 	handleErr(err)
 	defer db.Close()
