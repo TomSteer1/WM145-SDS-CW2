@@ -1,10 +1,17 @@
-FROM golang:latest
+FROM golang:alpine as builder
 
 LABEL Author="Tom Steer"
 
+ENV CGO_ENABLED=1
+RUN apk add --no-cache gcc libc-dev
 COPY app /app
 WORKDIR /app
 RUN go build -o main .
+
+FROM alpine:latest
+
+WORKDIR /app
+COPY --from=builder /app/main .
 
 EXPOSE 8080
 
