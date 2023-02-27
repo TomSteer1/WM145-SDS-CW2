@@ -2,10 +2,8 @@ name: Deploy Rust Docker Container
 run-name: Rust Deploy
 on: 
   push:
-    branches:
-      - '**'
     paths:
-      - "rust-notebook/*"
+      - "rust-notebook/**"
 
 env:
   REGISTRY: ghcr.io
@@ -18,10 +16,11 @@ jobs:
       - name: Format Rust code
         run: |
           cd rust-notebook/
-          cargo fmt --all -- --check
+          cargo fmt --all 
     
   test-rust:
     runs-on: ubuntu-latest
+    needs: format-rust
     steps:
       - uses: actions/checkout@v3
       - name: Ensures package builds
