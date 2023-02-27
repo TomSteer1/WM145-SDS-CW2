@@ -114,6 +114,8 @@ fn sqlite() {
         .unwrap();
 }
 
+
+// Function sends a request to a Discord webhook to log the note in general channel
 fn log_notes(note: &str) {
     let binding = "{\"username\": \"Rust Note Updater\", \"content\": \"New note added to Rust notebook: "
         .to_owned()
@@ -138,6 +140,7 @@ fn log_notes(note: &str) {
     transfer.perform().unwrap();
 }
 
+// 
 fn get_notes() -> Result<Vec<Note>> {
     let conn = Connection::open("notes.db").unwrap();
 
