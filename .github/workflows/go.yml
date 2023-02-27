@@ -3,7 +3,7 @@ run-name: Go Deploy
 on: 
   push:
     paths:
-      - "go-notebook/*"
+      - "go-notebook/**"
 
 env:
   REGISTRY: ghcr.io
