@@ -16,7 +16,7 @@ jobs:
       - name: Format Rust code
         run: |
           cd rust-notebook/
-          cargo fmt --all 
+          cargo fmt --all -- --check 
     
   test-rust:
     runs-on: ubuntu-latest
