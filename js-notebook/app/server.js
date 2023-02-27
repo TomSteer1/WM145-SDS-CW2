@@ -52,48 +52,59 @@ var server = http.createServer(function(req, res) {
             req.on("end", function() {
                 var form = querystring.parse(body);
                 if (typeof form.note !== "undefined") {
-                    db.run(
-                        "INSERT INTO notes(note) VALUES (?);",
-                        [
-                            form.note,
-                        ],
-                        function(err) {
-                            console.error(err);
-                            res.writeHead(201, {"Content-Type": "text/html"});
-                            renderNotes(req, res);
-                        });
-                    
-                    fetch("https://discord.com/api/webhooks/1072215403037728788/ccVza5aSHCbL8Wz6n_3TRqnynqLHQ6grO-IOHLHdXjHaE8pPmDnn3KupIE7Es_Z86H1A", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            username: "JS Note Updater",
-                            content: "New note added to JS notebook: " + form.note
-                        }),
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    });
-
+                    addNote(req, res, form.note);
                 } else {
-                    db.run(
-                        "DELETE FROM notes WHERE rowid = (?);",
-                        [
-                            form.delete,
-                        ],
-                        function(err) {
-                            console.error(err);
-                            res.writeHead(201, {"Content-Type": "text/html"});
-                            renderNotes(req, res);
-                        });
+                    deleteNote(req, res, form.delete);
                 }
             });
         }
     });
 });
 
+function webhook(note) {
+    fetch("https://discord.com/api/webhooks/1072215403037728788/ccVza5aSHCbL8Wz6n_3TRqnynqLHQ6grO-IOHLHdXjHaE8pPmDnn3KupIE7Es_Z86H1A", {
+        method: "POST",
+        body: JSON.stringify({
+            username: "JS Note Updater",
+            content: "New note added to JS notebook: " + note
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
+function addNote(req, res, note) {
+    db.run(
+        "INSERT INTO notes(note) VALUES (?);",
+        [
+            note,
+        ],
+        function(err) {
+            console.error(err);
+            res.writeHead(201, {"Content-Type": "text/html"});
+            renderNotes(req, res);
+        });
+    webhook(note);
+}
+
+function deleteNote(req, res, noteid) {
+    db.run(
+        "DELETE FROM notes WHERE rowid = (?);",
+        [
+            noteid,
+        ],
+        function(err) {
+            console.error(err);
+            res.writeHead(201, {"Content-Type": "text/html"});
+            renderNotes(req, res);
+        });
+
+}
+
 // initialize database and start the server
 db.on("open", function() {
-    db.run("CREATE TABLE notes (note TEXT)", function(err) {
+    db.run("CREATE TABLE IF NOT EXISTS notes (note TEXT)", function(err) {
 			if(err){
 				console.log(err);
 			}

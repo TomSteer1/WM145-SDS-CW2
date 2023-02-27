@@ -1,3 +1,5 @@
+#[cfg(test)] mod tests;
+
 use curl::easy::{Easy, List};
 use rocket::form::Form;
 use rocket::response::content::RawHtml;
@@ -113,7 +115,7 @@ fn sqlite() {
 }
 
 fn log_notes(note: &str) {
-    let binding = "{\"username\": \"Rust Notes Updater Bot\", \"content\": \"New note added to Rust notebook: "
+    let binding = "{\"username\": \"Rust Notes Updater\", \"content\": \"New note added to Rust notebook: "
         .to_owned()
         + note
         + "\"}";
