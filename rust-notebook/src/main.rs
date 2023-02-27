@@ -1,4 +1,5 @@
-#[cfg(test)] mod tests;
+#[cfg(test)]
+mod tests;
 
 use curl::easy::{Easy, List};
 use rocket::form::Form;
@@ -114,13 +115,13 @@ fn sqlite() {
         .unwrap();
 }
 
-
 // Function sends a request to a Discord webhook to log the note in general channel
 fn log_notes(note: &str) {
-    let binding = "{\"username\": \"Rust Note Updater\", \"content\": \"New note added to Rust notebook: "
-        .to_owned()
-        + note
-        + "\"}";
+    let binding =
+        "{\"username\": \"Rust Note Updater\", \"content\": \"New note added to Rust notebook: "
+            .to_owned()
+            + note
+            + "\"}";
     let mut data = binding.as_str().as_bytes();
 
     let mut list = List::new();
@@ -140,7 +141,7 @@ fn log_notes(note: &str) {
     transfer.perform().unwrap();
 }
 
-// 
+//
 fn get_notes() -> Result<Vec<Note>> {
     let conn = Connection::open("notes.db").unwrap();
 
