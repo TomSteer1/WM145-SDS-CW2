@@ -2,6 +2,8 @@ name: Deploy Rust Docker Container
 run-name: Rust Deploy
 on: 
   push:
+    branches:
+      - '**'
     paths:
       - "rust-notebook/*"
 
