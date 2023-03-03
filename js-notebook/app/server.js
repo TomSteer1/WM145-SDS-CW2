@@ -18,20 +18,23 @@ function renderNotes(req, res) {
             res.end("<h1>Error: " + err + "</h1>");
             return;
         }
-        res.write("<link rel='stylesheet' href='style.css'>" +
-            "<h1>JS Notebook</h1>" +
-            "<form method='POST'>" +
-            "<label>Note: <input name='note' value=''></label>" +
-            "<button>Add</button>" +
-            "</form>");
+        res.write(`<link rel="stylesheet" href="style.css">
+            <h1>JS Notebook</h1>
+            <form method="POST">
+            <label>Note: <input name="note" value=""></label>
+            <input type="hidden" name="method" value="create">
+            <button>Add</button>
+            </form>`);
         res.write("<ul class='notes'>");
         rows.forEach(function(row) {
-            res.write("<li>" +
-                escape_html(row.note) +
-                "<form method='POST'>" + "<button name='delete' value='" +
-                escape_html(row.id) +
-                "'style='float: right;'>Delete</button></li>" +
-                "</form>");
+            res.write("<li>" + 
+                escape_html(row.note) + 
+                `<form method="POST">
+                <input type="hidden" name="method" value="delete">
+                <input type="hidden" name="id" value="${row.id}">
+                <button>Delete</button>
+                </form>
+                </li>`);
         });
         res.end("</ul>");
     });
@@ -51,10 +54,24 @@ var server = http.createServer(function(req, res) {
             });
             req.on("end", function() {
                 var form = querystring.parse(body);
-                if (typeof form.note !== "undefined") {
-                    addNote(req, res, form.note);
-                } else {
-                    deleteNote(req, res, form.delete);
+
+                switch (form.method) {
+                    case "create":
+                        console.log(form.note);
+                        if (form.note.length > 0) {
+                            addNote(req, res, form.note);
+                        } else {
+                            res.writeHead(400, {"Content-Type": "text/html"});
+                            res.end("<h1>Error: Note cannot be empty</h1>");
+                            renderNotes(req, res);
+                        }
+                        break;
+                    case "delete":
+                        deleteNote(req, res, form.id);
+                        break;
+                    default:
+                        res.writeHead(400, {"Content-Type": "text/html"});
+                        res.end("<h1>Error: Invalid method</h1>");
                 }
             });
         }
@@ -83,10 +100,11 @@ function addNote(req, res, note) {
         function(err) {
             console.error(err);
             res.writeHead(201, {"Content-Type": "text/html"});
+           // console.log(res.status);
             renderNotes(req, res);
         });
     webhook(note);
-}
+    }
 
 function deleteNote(req, res, noteid) {
     db.run(
@@ -99,7 +117,6 @@ function deleteNote(req, res, noteid) {
             res.writeHead(201, {"Content-Type": "text/html"});
             renderNotes(req, res);
         });
-
 }
 
 // initialize database and start the server
