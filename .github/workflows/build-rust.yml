@@ -1,26 +1,19 @@
-name: Deploy GO Docker Container
-run-name: Go Deploy
+name: Deploy Rust Docker Container
+run-name: Rust Deploy
 on: 
   push:
+    branches:
+      - main
     paths:
-      - "go-notebook/**"
+      - "rust-notebook/**"
 
 env:
   REGISTRY: ghcr.io
 
-jobs:
-  test-go:
+jobs:      
+  build-and-push-rust:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Ensures package builds
-        run: |
-          cd go-notebook/app
-          go build -o main .
-
-  build-and-push-go:
-    runs-on: ubuntu-latest
-    needs: test-go
+    needs: [test-rust, format-rust]
     permissions:
       contents: read
       packages: write
@@ -39,6 +32,6 @@ jobs:
       - name: build-and-push-image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: go-notebook
+          context: rust-notebook
           push: true
-          tags: "ghcr.io/osharpey/go-notes" 
+          tags: "ghcr.io/osharpey/rust-notes" 
