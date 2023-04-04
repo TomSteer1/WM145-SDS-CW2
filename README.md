@@ -10,11 +10,39 @@ This repo contains 3 implementations of the notes system. The orginial, using ja
 - [Go](https://go.dev/learn/)
 - [NodeJS & npm](https://nodejs.org/en/)
 - [Docker (Only if planning to run through docker)](https://www.docker.com/)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Terraform (easiest to use package manager)](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
 
 ## Getting started
 
 ### In the cloud
+- Install terraform and the AWS CLI
+- Set up the AWS CLI
+```bash
+aws configure
+# When prompted enter your acces key, secret key, and region
+# More info can be found here --> https://docs.aws.amazon.com/cli/latest/reference/configure/
+```
+
+- Clone the repo and navigate to the terraform directory
+```bash
+ git clone https://github.com/oSharpey/sds-cw2
+ cd sds-cw2/terraform
+```
+
+- To launch the cloud infrustructre run:
+```bash
+terraform init
+terraform plan # this lets you check the resources that will be created
+terraform apply # --auto-approve if you feel like
+```
+
+- To tear down the infrustructre run:
+```bash
+terraform destroy # --auto-approve if you feel like
+```
+
 Navigate to the URL of the implementation of your choice
 - https://rust.tomsteer.host
 - https://js.tomsteer.host
@@ -112,13 +140,13 @@ docker run <image id>  # run with the docker image id of the image you just buil
 - [ ] Architecture Diagram
 - [ ] ADRs
 - [x] Funcional locally
-- [ ] Deploy to cloud
-- [ ] Scripted Cloud Creation
-- [ ] Automation
+- [x] Deploy to cloud
+- [x] Scripted Cloud Creation
+- [x] Automation
   - [x] Testing
   - [x] Building
-  - [ ] Deploying
-- [ ] Tear down command
+  - [x] Deploying
+- [x] Tear down command
 - [ ] Message Logging
   - [x] Implement Message Logging
   - [ ] Design Message Logging algorithm 

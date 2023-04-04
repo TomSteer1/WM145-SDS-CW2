@@ -1,0 +1,7 @@
+vpc_cidr = "10.28.0.0/28"
+subnet_cidr = "10.28.0.0/28"
+server-availability-zone = "eu-west-2a"
+server-instance-type = "t2.micro"
+server-region = "eu-west-2"
+ssh-ec2-key = "tom" 
+eip-allocation-id = "eipalloc-0864219f0a2d66120"

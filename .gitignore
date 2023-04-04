@@ -5,3 +5,8 @@ node_modules/
 package-lock.json
 Cargo.lock
 target/
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+.terraform.tfstate.lock.info
+terraform.tfstate.backup
