@@ -104,9 +104,9 @@ Go to http://localhost:8080 and enjoy!
 #### Pulling the package from the repo
 - Download your chosen implementation
 ``` bash
-docker pull ghcr.io/osharpey/go-notes:latest
+docker pull osharpey/go-notes:latest
 docker pull ghcr.io/osharpey/js-notes:latest
-docker pull ghcr.io/osharpey/rust-notes:latest
+docker pull osharpey/rust-notes:latest
 ```
 - List all the images on your system
 - Run the docker container with the image id of your chosen package
