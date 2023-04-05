@@ -1,0 +1,59 @@
+regions:
+- eu-west-2
+
+account-blocklist:
+- 1234567890
+
+resource-types:
+  targets:
+  - EC2Instance
+  - EC2VPC
+  - EC2Subnet
+  - EC2SecurityGroup
+  - EC2NetworkInterface
+  - EC2InternetGateway
+  - EC2RouteTable
+  - EC2NetworkInterface
+  - EC2Route
+  - EC2InternetGatewayAttachment
+
+accounts:
+  618460780646:
+    filters:
+      EC2Instance:
+        - property: "tag:Name"
+          value: "tom-oscar-notes-server"
+          invert: true
+      EC2VPC:
+        - property: "tag:Name"
+          value: "tom-oscar-notes-vpc"
+          invert: true
+      EC2InternetGateway:
+        - property: "tag:Name"
+          value: "tom-oscar-notes-igw"
+          invert: true
+      EC2InternetGatewayAttachment:
+        - property: "tag:igw:Name"
+          value: "tom-oscar-notes-igw"
+          invert: true
+      EC2RouteTable:
+        - property: "tag:Name"
+          value: "tom-oscar-notes-rt"
+          invert: true
+      EC2Subnet:
+        - property: "tag:Name"
+          value: "tom-oscar-pub-subnet-a"
+          invert: true
+      EC2SecurityGroup:
+        - property: "tag:Name"
+          value: "tom-oscar-Security-Group"
+          invert: true
+      EC2NetworkInterface:
+        - property: "tag:Name"
+          value: "tom-oscar-notes-server-nic"
+          invert: true
+      EC2NetworkInterfaceAttachment:
+        - property: "tag:Name"
+          value: "tom-oscar-notes-server-nic-attachment"
+          invert: true
+

@@ -48,7 +48,7 @@ services:
     expose:
       - 8080
     volumes:
-      - /tmp/notes.db:/app/notes.db
+      - /tmp/notes.db:/notes.db
     environment:
       - VIRTUAL_HOST=rust.tomsteer.host
 ' > docker-compose.yml

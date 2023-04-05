@@ -45,7 +45,6 @@ terraform destroy # --auto-approve if you feel like
 
 Navigate to the URL of the implementation of your choice
 - https://rust.tomsteer.host
-- https://js.tomsteer.host
 - https://go.tomsteer.host
 
 
@@ -105,7 +104,6 @@ Go to http://localhost:8080 and enjoy!
 - Download your chosen implementation
 ``` bash
 docker pull osharpey/go-notes:latest
-docker pull ghcr.io/osharpey/js-notes:latest
 docker pull osharpey/rust-notes:latest
 ```
 - List all the images on your system

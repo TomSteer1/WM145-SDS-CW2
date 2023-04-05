@@ -162,6 +162,9 @@ resource "aws_network_interface" "notes-server-nic" {
   subnet_id       = aws_subnet.pub-subnet-a.id
   private_ips     = ["10.28.0.10"]
   security_groups = [aws_security_group.allow-ssh-http-s.id]
+	tags = {
+		Name = "tom-oscar-notes-server-nic"
+	}
 }
 
 
@@ -183,7 +186,7 @@ resource "aws_instance" "notes-server-instance" {
   ami               = "ami-0ad97c80f2dfe623b"
   instance_type     = var.server-instance-type
   availability_zone = var.server-availability-zone
-  key_name          = "oscar-sharpe-ssh"
+  key_name          = var.ssh-ec2-key
 
   network_interface {
     device_index         = 0
@@ -209,4 +212,3 @@ output "server_private_ip" {
 output "server_id" {
   value = aws_instance.notes-server-instance.id
 }
-
