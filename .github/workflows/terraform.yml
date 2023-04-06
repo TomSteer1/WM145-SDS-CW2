@@ -1,6 +1,13 @@
 name: Deploy Terraform to AWS
 run-name: Terraform Deploy
-on: push
+on: 
+  push:
+    branches:
+      - main
+    paths:
+      - "go-notebook/**"
+      - "rust-notebook/**"
+      - "terraform/**"
 
 jobs:
   destroy-previous:
