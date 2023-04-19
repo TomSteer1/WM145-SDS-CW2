@@ -49,6 +49,12 @@ echo "Deleting Security Groups"
 resources=$(aws ec2 describe-security-groups --filters "Name=tag:Name,Values=tom-oscar*" --query 'SecurityGroups[*].GroupId' --output text)
 
 for resource in $resources; do
+		# Check if default security group
+		name=$(aws ec2 describe-security-groups --group-ids $resource --query 'SecurityGroups[*].GroupName' --output text)
+		if [ "$name" == "default" ]; then
+			echo "Skipping default security group"
+			continue
+		fi
 		echo "Deleting $resource"
 		aws ec2 delete-security-group --group-id $resource
 done

@@ -114,9 +114,7 @@ resource "aws_route_table_association" "a" {
 
 
 # 6. Create security group to allow ssh, http & https
-resource "aws_security_group" "allow-ssh-http-s" {
-  name        = "allow_web_ssh"
-  description = "Allow TLS inbound traffic & HTTP(s)"
+resource "aws_default_security_group" "default" {
   vpc_id      = aws_vpc.notes-vpc.id
 
   ingress {
@@ -161,7 +159,6 @@ resource "aws_security_group" "allow-ssh-http-s" {
 resource "aws_network_interface" "notes-server-nic" {
   subnet_id       = aws_subnet.pub-subnet-a.id
   private_ips     = ["10.28.0.10"]
-  security_groups = [aws_security_group.allow-ssh-http-s.id]
 	tags = {
 		Name = "tom-oscar-notes-server-nic"
 	}
