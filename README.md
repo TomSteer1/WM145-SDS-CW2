@@ -136,7 +136,7 @@ docker run <image id>  # run with the docker image id of the image you just buil
 ---
 # To-Do
 - [ ] Architecture Diagram
-- [ ] ADRs
+- [x] ADRs
 - [x] Funcional locally
 - [x] Deploy to cloud
 - [x] Scripted Cloud Creation
@@ -145,6 +145,6 @@ docker run <image id>  # run with the docker image id of the image you just buil
   - [x] Building
   - [x] Deploying
 - [x] Tear down command
-- [ ] Message Logging
+- [x] Message Logging
+  - [x] Design Message Logging algorithm 
   - [x] Implement Message Logging
-  - [ ] Design Message Logging algorithm 
