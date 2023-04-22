@@ -13,6 +13,9 @@ This repo contains 3 implementations of the notes system. The orginial, using ja
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Terraform (easiest to use package manager)](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
+## Cloud Architecture Diagram
+
+![Architecture Design](./doc/assets/Design.png)
 
 ## Getting started
 
@@ -135,7 +138,7 @@ docker run <image id>  # run with the docker image id of the image you just buil
 
 ---
 # To-Do
-- [ ] Architecture Diagram
+- [x] Architecture Diagram
 - [x] ADRs
 - [x] Funcional locally
 - [x] Deploy to cloud
